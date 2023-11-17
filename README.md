@@ -1,5 +1,5 @@
 # watermeter
-Vattenmätare projekt för våra hästar
+Vattenmätare för våra hästar
 
 
 Viktigt! Jag tar inget ansvar här för att ni gör rätt :). 
