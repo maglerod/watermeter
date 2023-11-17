@@ -1,0 +1,73 @@
+1. Ett entity kort som visar värdena på varje entitet. JAg har ett sådant kort per häst.
+Detta lägger du in på valfriplats i din dashboard / lovelace.
+
+Yamlkod: 
+<START - KOPIERA INTE>
+type: entities
+entities:
+  - entity: sensor.fleygur_waterflow_waterflow
+    name: 'Aktuell '
+    icon: mdi:water-pump
+  - entity: sensor.fleygur_waterflow_total_used
+    name: Druckit totalt
+    icon: mdi:water
+  - entity: sensor.fleygur_water_flow_duration
+    name: Drack i sekunder
+    icon: mdi:waves-arrow-right
+  - entity: sensor.fleygur_volym_senaste
+    icon: mdi:water-circle
+    name: Drack senast
+  - entity: sensor.fleygur_waterflow_temperature
+    name: Temperatur
+  - entity: sensor.fleygur_waterflow_total_m3
+    name: Total volym
+    icon: mdi:cup-water
+title: Fleygur
+<SLUT - KOPIERA INTE>
+
+
+2. Ett litet history diagram där jag kan se vid vilka tidpunkter hästarna har druckit.
+Yamlkod: 
+<START - KOPIERA INTE>
+type: history-graph
+entities:
+  - entity: sensor.fleygur_volym_senaste
+    name: Fleygur
+  # Upprepa med fler entiteter / name om du har fler sensorer som du vill visa på samma diagram. Här har jag lagt in alla hästarna.
+title: Druckit liter
+<SLUT - KOPIERA INTE>
+
+
+3.ett apexcharts-card, som visar antal liter för resp häst varje dygn. Det är här mina utility sensorer kommer in och används.
+Jag har även valt att visa senaste temperatur vid varje dygn. Temperatur på vattnet.
+Yamlkod: 
+<START - KOPIERA INTE>
+type: custom:apexcharts-card
+header:
+  show: true
+  title: Dygnsdricka
+  show_states: false
+  colorize_states: true
+graph_span: 7d
+span:
+  start: day
+  offset: '-6day'
+series:
+#Vill du visa fler dygnsbaserade utility sensorer så kopiera från raden under
+  - entity: sensor.fleygur_dygnsdricka
+    type: column
+    name: Fleygur
+    group_by:
+      duration: 1day
+      func: last
+#Och kopiera hit, samt lägg in din sensor.
+#Så här har jag lagt in alla hästarnas sensorer, då bildar dom olika färger automatiskt.
+
+  - entity: sensor.fleygur_waterflow_temperature
+    name: Temperatur
+    type: line
+    group_by:
+      duration: 1day
+      func: last
+    stroke_width: 2
+<SLUT - KOPIERA INTE>

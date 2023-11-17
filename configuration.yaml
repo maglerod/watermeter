@@ -1,0 +1,41 @@
+# Skapa en template binary sensor som är antingen av eller på beroende på om det är flöde eller inte.
+# Har ni fler sensorer, är det bara att upprepa men med annat namn på template
+
+template:
+  - binary_sensor:
+    - name: Vattenfode (ON/OFF)
+      state: "{{ states('sensor.fleygur_waterflow_waterflow') | float(0) > 0 }}"
+
+# Skapa en sensor som beräknar varaktigheten av senaste flöde.
+# Viktigt att ni har noterat vad Era entiteter blir då dom behövs nedan.
+# Har ni fler sensorer, är det bara att upprepa men med annat namn på sensorn och annat friendly namn.
+
+sensor:
+  - platform: template
+    sensors:
+       fleygur_water_flow_duration:
+         friendly_name: Varaktighet
+         unit_of_measurement: "s"
+         value_template: >
+          {% if states('sensor.fleygur_water_flow_duration') == 'unknown' %}
+            0
+          {% else %}
+            {% set t = states('sensor.fleygur_water_flow_duration') | float(default=0) | round(1) %}
+            {% if states('binary_sensor.vattenfode_on_off') == 'off' %}
+              {{ t }}
+            {% else %}
+              {{ now().timestamp() - as_timestamp(states.binary_sensor.vattenfode_on_off.last_changed) | round(1) }}
+            {% endif %}
+          {% endif %}
+          
+# Skapa en sensor som beräknar volymen av senaste flödet. Hur många liter gick det vid senaste flöde.
+# Viktigt att ni har noterat vad Era entiteter blir då dom behövs nedan.
+# Har ni fler sensorer, är det bara att upprepa men med annat namn på sensorn och annat friendly namn.
+
+  - platform: template
+    sensors:
+        fleygur_volym_senaste:
+          friendly_name: Fleygur volym senaste dricka
+          unit_of_measurement: 'L'
+          value_template: >
+            {{ (states('sensor.fleygur_waterflow_total_used') | float - states('input_number.fleygur_startvolym_flode') | float) | round(2, 'common') }}

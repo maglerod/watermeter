@@ -1,0 +1,69 @@
+1. En automation som sätter start volymen på hjälparen vi har skapat upp, baserat på binary sensorn vi har skapat. Om det är flöde eller inte. Det är det som aktiverar denna automation.
+
+Yamlkod: 
+<START - KOPIERA INTE>
+alias: Fleygur ställ in start volym
+description: ""
+trigger:
+  - platform: state
+    entity_id:
+      - binary_sensor.vattenfode_on_off
+    to: "on"
+action:
+  - service: input_number.set_value
+    data:
+      value: "{{ states('sensor.fleygur_waterflow_total_used') }}"
+    target:
+      entity_id: input_number.fleygur_startvolym_flode
+mode: single
+<SLUT - KOPIERA INTE>
+
+
+
+2. Anropa skriptet "nollställ dricka". Som jag beskrivit tidigare så vill jag nollställa mätaren vid 08 tiden, för då har vi fått
+antal liter som hästen druckit från insläpp till utsläpp nästa dag.
+Vill ni ha en mätare som ackumulerar tex hur mycket vatten man förbrukar varje dag, då kan ni sätta återställnings cykeln direkt på hjälparen genom att välja "daily" .  Vill ni ha en ytterligare som beräknar per vecka, då skapar ni en ny utility sensor med cykeln "weekly" osv.
+
+Detta skript finns beskrivit i scripts.txt
+
+Yamlkod: 
+<START - KOPIERA INTE>
+alias: Nollställ dygnsdricka
+description: ""
+trigger:
+  - platform: time
+    at: "08:00:00"
+condition: []
+action:
+  - service: script.nollstall_dygnsdricka
+    data: {}
+mode: single
+
+<SLUT - KOPIERA INTE>
+
+
+
+3. Notis automation
+Då jag har monterat helt nytt vattensystem och slängt ut det gamla så valde jag att sätta in nya fräscha koppar.
+Jag ville i början veta om hästarna började dricka. Nu när dom vant sig vid nya kopparna kan vi ta bort notiserna om man störs av det :)
+Men det är helt enkelt en automation som skickar notis till mig eller frun när hästarna dricker
+Skapa en automation när Fleygur waterflow enheten ändras och överstiger "1" dvsa mer än 1L/min 
+
+alias: Fleygur dricker notis
+description: ""
+trigger:
+  - type: value
+    platform: device
+    device_id: 991a7c9....
+    entity_id: b.....
+    domain: sensor
+    above: 1
+condition: []
+action:
+  - service: notify.mobile_app_aXXXX
+    data:
+      message: Fleygur dricker
+  - service: notify.mobile_app_aYYYY
+    data:
+      message: Fleygur dricker
+mode: single

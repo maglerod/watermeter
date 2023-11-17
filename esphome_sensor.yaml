@@ -1,0 +1,81 @@
+esphome:  
+  name: fleygur-waterflow
+  friendly_name: Fleygur waterflow
+
+esp8266:
+  board: nodemcuv2
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "Enter your API Key here, that you received when you added new esphome device"
+
+ota:
+  password: "b0b8588c13a49e44cdbdfd480fdfcx55"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Fleygur-Waterflow"
+    password: "3FO4zc4MsfS1"
+
+captive_portal:
+
+# used for the temperature sensor. If not using temperature sensor, remove and remove sensor further down
+dallas:
+  - pin: D7
+    update_interval: 15s
+
+sensor:  
+  # WiFi signal strength sensor
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 30s       
+
+  # Pulse sensor, connected to the water meter sensor
+  - platform: pulse_counter
+    pin:
+      number: D2
+      mode:
+        input: true
+        pullup: true
+    unit_of_measurement: 'L/min'
+    accuracy_decimals: 2
+    id: water_usage
+    name: "Waterflow"
+    update_interval: 5s
+    filters: # This formula is important and can be different based on what kind of sensor youre using to return L
+      - lambda: return (x / 396); # 396 = 6,6 * 60
+  
+  # Total usage in M3 sensor    
+  - platform: integration
+    name: "Total M3"    
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: 'm³'
+    accuracy_decimals: 2
+    sensor: water_usage # Using the pulse_counter sensor above to build this sensor
+    time_unit: min
+    filters:
+        - lambda: return (x / 1000);
+  
+  # Total usage in liter
+  - platform: integration
+    name: "Total used"
+    device_class: water
+    state_class: total_increasing
+    unit_of_measurement: 'L'
+    accuracy_decimals: 2
+    sensor: water_usage # Using the pulse_counter sensor above to build this sensor
+    time_unit: min
+
+  # Temperature sensor by using dallas platform  
+  - platform: dallas
+    index: 0
+    name: "Temperature"

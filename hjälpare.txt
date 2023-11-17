@@ -1,0 +1,16 @@
+Skapa en hjälpare för att hålla koll på startvolymen när sensorn börjar mäta.
+Det skall vara en Nummer hjälpare.
+
+initial: null
+editable: true
+min: 0
+max: 100000
+step: 1
+mode: box
+unit_of_measurement: Liter
+icon: mdi:cup-water
+friendly_name: Fleygur startvolym (flöde)
+
+Denna har fått entitet: input_number.fleygur_startvolym_flode
+
+Notera entitet din hjälpare får, den kommer behövas i bla configuration.yaml

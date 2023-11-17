@@ -1,0 +1,23 @@
+Utilitysensor är en typ av en hjälpare. Den kan användas för att ackumulera data från annan sensor som du sedan kan 
+nollställa när du önskar vid vald cykel.
+I Mitt fall har jag valt att inte registrera en cykel på själva utilitysensorn. Även om det finns en "daily" återställning så vill jag inte
+att sensorn nollställs efter 23.59, våra hästar tas ut på morgonen vid 6-7 tiden och jag vill veta hur mycket dom har druckit per "dags vistelse".  
+
+Därför nollställer jag mina utility sensorer via automation kl 08.00 istället med hjälp av en service, callibrate och med 0 som nytt värde.
+
+
+state_class: total_increasing
+source: sensor.fleygur_waterflow_total_used
+status: collecting
+last_period: "0"
+last_valid_state: "17.96"
+last_reset: "2023-11-14T14:28:42.600136+00:00"
+unit_of_measurement: L
+icon: mdi:counter
+friendly_name: Fleygur dygnsdricka
+
+Skapa en ny utilitysensor "mätare" under integrationer / skript / hjälpare.
+Döp den till vad du önskar samt välj vilken sensor som förser den med data. Jag använder sensorn: fleygur_waterflow_total_used
+Välj när ni vill att den ska återställas, eller som jag utför återställningen via automation.
+
+

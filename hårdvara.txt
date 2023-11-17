@@ -1,0 +1,24 @@
+Följande hårdvara har jag använt
+
+ESPHome: 
+- esp8266 nodemcuv2
+Körde med AZ-Delivery NodeMCU Lua Lolin V3 ESP8266 MOD12-F
+
+Vattenmätare:
+YF-B5 , fungerar säkert med andra också. Som tex: YF-B10 mfl.
+Det man skall tänka på är själva pulsehanteringen som kan variera från sensor till sensor.
+Se i ESPHome.txt, där är koden för mina ESP Home sensorer för vattenmätarna.
+
+I mitt fall satte jag den gula "data" på D2.
+
+Temperatur sensor:
+Jag valde att sätta en temperatursensor på en av ESPhome sensorerna. Fleygur sensor.
+Då körde jag med en vanlig ds18b20 sensor. Finns massor av tips på hur den kopplas in.
+Glöm inte motståndet: 4,7k! men borde fungera med motstånd från 1k.
+Motståndet kopplar du mellan ström och data (gul).
+
+I mitt fall satte jag den gula "data" på D7.
+
+Ska du inte ha temperatur sensor, så bara radera själva sensorn samt dallas specifikationen. 
+
+

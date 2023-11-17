@@ -1,0 +1,4 @@
+Inte snyggat till dom än, kommer kanske sen.
+Men inget märkvärdigt, bara lite flöde baserat på om en sensor står o går hela tiden längre än X sekunder. 
+
+När man tycker att det är ett "onormalt" beteende på den sensorn, som tex vid läckage eller för lång duschning :)

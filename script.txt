@@ -1,0 +1,18 @@
+Ett script som anropar tjänst på utility sensorn att calibrera sig och med 0 som nytt värde. 
+Anropas av en automation som är inställd kl 08.00
+
+Yamlkod: 
+<START - KOPIERA INTE>
+alias: Nollställ dygnsdricka
+sequence:
+  - service: utility_meter.calibrate
+    data:
+      value: "0"
+    target:
+      entity_id:
+        - sensor.fleygur_dygnsdricka
+        # har du fler utility sensorer som skall nollställas vid samma tillfälle kan du fortsätta lägga till dom här.
+	# jag har i mitt fall alla vattenmätar sensorer till hästarna här
+mode: single
+icon: mdi:water
+<SLUT - KOPIERA INTE>
